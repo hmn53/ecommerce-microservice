@@ -6,7 +6,7 @@ class UserRepository {
     }
 
     async getUserByUsername(username) {
-        return User.query().findOne({ username });
+        return await User.query().findOne({ username });
     }
 }
 
