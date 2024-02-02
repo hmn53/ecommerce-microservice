@@ -3,8 +3,6 @@
  * @returns { Promise<void> }
  */
 exports.up = async function (knex) {
-    await new Promise(res => { setTimeout(res, 5000) });
-
     await knex.schema.createTableIfNotExists('users', table => {
         table.increments('id').primary();
         table.string('username', 20);

@@ -13,15 +13,12 @@ x-postgres-common: &postgres-common
 services:
   auth-db:
     <<: *postgres-common
-    ports:
-      - 5432:5432
     container_name: auth-db
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: auth
     networks:
-      - ecommerce
       - auth
     volumes:
       - auth-db:/data/postgres
@@ -40,7 +37,37 @@ services:
       - ecommerce
       - auth
     depends_on:
-      - auth-db
+      auth-db:
+        condition: service_healthy
+
+  product-db:
+    <<: *postgres-common
+    container_name: product-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: product
+    networks:
+      - product
+    volumes:
+      - product-db:/data/postgres
+
+  product:
+    build: ./product
+    ports:
+      - "5002:5002"
+    container_name: product
+    environment:
+      POSTGRES_HOST: product-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: product
+    networks:
+      - ecommerce
+      - product
+    depends_on:
+      product-db:
+        condition: service_healthy
 
   api-gateway:
     build: ./api-gateway
@@ -49,14 +76,18 @@ services:
     container_name: api-gateway
     environment:
       AUTH_URL: http://auth:5001
+      PRODUCT_URL: http://product:5002
     networks:
       - ecommerce
     depends_on:
       - auth
+      - product
 
 volumes:
   auth-db:
+  product-db:
 
 networks:
   auth:
+  product:
   ecommerce:
