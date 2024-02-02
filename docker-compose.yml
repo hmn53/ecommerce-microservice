@@ -28,7 +28,7 @@ services:
   auth:
     build: ./auth
     ports:
-      - "5000:5000"
+      - "5001:5001"
     environment:
       POSTGRES_HOST: auth-db
       POSTGRES_USER: user
