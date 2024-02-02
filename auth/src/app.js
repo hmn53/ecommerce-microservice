@@ -11,7 +11,7 @@ class App {
     }
 
     start() {
-        this.server = this.app.listen(config.port, () => console.log(`Auth server started on port ${config.port}`));
+        this.server = this.app.listen(config.port, () => console.log(`Auth server listening on port ${config.port}`));
     }
 
     setMiddlewares() {

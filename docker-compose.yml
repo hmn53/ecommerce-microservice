@@ -15,6 +15,7 @@ services:
     <<: *postgres-common
     ports:
       - 5432:5432
+    container_name: auth-db
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -29,6 +30,7 @@ services:
     build: ./auth
     ports:
       - "5001:5001"
+    container_name: auth
     environment:
       POSTGRES_HOST: auth-db
       POSTGRES_USER: user
@@ -39,6 +41,18 @@ services:
       - auth
     depends_on:
       - auth-db
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "5000:5000"
+    container_name: api-gateway
+    environment:
+      AUTH_URL: http://auth:5001
+    networks:
+      - ecommerce
+    depends_on:
+      - auth
 
 volumes:
   auth-db:
