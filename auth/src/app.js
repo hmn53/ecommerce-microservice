@@ -1,5 +1,6 @@
 const express = require("express");
 const config = require("./config");
+const User = require("./models/user");
 
 class App {
     constructor() {
