@@ -1,1 +1,4 @@
-console.log("Hello")
+const App = require("./src/app");
+
+const app = new App();
+app.start();
