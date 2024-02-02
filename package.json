@@ -1,0 +1,8 @@
+{
+  "name": "ecommerce-microservice",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/hmn53/ecommerce-microservice.git",
+  "author": "Hatim <hatim.nalawala987@gmail.com>",
+  "license": "MIT"
+}
