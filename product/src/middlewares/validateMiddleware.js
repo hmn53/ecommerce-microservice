@@ -5,6 +5,6 @@ module.exports = (schema) =>
       next();
     }
     catch (err) {
-      return res.status(400).json({ message: err })
+      return res.status(400).json({ message: err.message })
     }
   }

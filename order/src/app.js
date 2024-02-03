@@ -2,11 +2,14 @@ const express = require("express");
 const config = require("./config");
 const validateMiddleware = require("./middlewares/validateMiddleware");
 const getUserMiddleware = require("./middlewares/getUserMiddleware");
+const OrderController = require("./controllers/orderController");
+const { orderSchema } = require("./validators/orderValidator");
 
 class App {
     constructor() {
         this.app = express();
         this.setMiddlewares();
+        this.orderController = new OrderController();
         this.setRoutes();
     }
 
@@ -20,7 +23,9 @@ class App {
     }
 
     setRoutes() {
-
+        this.app.get("/", (req, res) => this.orderController.getOrders(req, res));
+        this.app.get("/:id", (req, res) => this.orderController.getOrder(req, res));
+        this.app.post("/:productId", validateMiddleware(orderSchema), (req, res) => this.orderController.createOrder(req, res));
     }
 }
 
