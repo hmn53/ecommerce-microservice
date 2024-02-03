@@ -12,6 +12,11 @@ app.use("/auth", (req, res) => {
   proxy.web(req, res, { target: config.authUrl });
 });
 
+// Pass user info to services
+proxy.on('proxyReq', function (proxyReq, req, _res, _options) {
+  proxyReq.setHeader('x-user', JSON.stringify(req.user));
+});
+
 // Route requests to the product service
 // Allow both buyer and seller to view products
 app.use("/product/view", authMiddleware, (req, res) => {
