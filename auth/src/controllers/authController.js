@@ -12,14 +12,14 @@ class AuthController {
             const result = await this.authService.login(user);
 
             if (result.success) {
-                res.json({ token: result.token });
+                return res.json({ token: result.token });
             }
             else {
-                res.status(400).json({ message: result.message });
+                return res.status(400).json({ message: result.message });
             }
         }
         catch (err) {
-            res.status(400).json({ message: err.message });
+            return res.status(400).json({ message: err.message });
         }
     }
 
@@ -29,14 +29,14 @@ class AuthController {
             const result = await this.authService.register(user);
 
             if (result.success) {
-                res.json({ token: result.token });
+                return res.json({ token: result.token });
             }
             else {
-                res.status(400).json({ message: result.message });
+                return res.status(400).json({ message: result.message });
             }
         }
         catch (err) {
-            res.status(400).json({ message: err.message });
+            return res.status(400).json({ message: err.message });
         }
     }
 }

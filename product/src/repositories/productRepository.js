@@ -18,14 +18,13 @@ class ProductRepository {
 
     async updateProduct(id, product) {
         return await Product.query()
-            .findById(id)
-            .patch(product)
-            .returning("*")
-            .first();
+            .patchAndFetchById(id, product)
+            .forUpdate();
     }
 
     async deleteProduct(id) {
         await Product.query()
+            .forUpdate()
             .deleteById(id);
     }
 }
