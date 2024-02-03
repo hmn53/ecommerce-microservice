@@ -65,6 +65,33 @@ services:
       product-db:
         condition: service_healthy
 
+  order-db:
+    <<: *postgres-common
+    container_name: order-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: order
+    networks:
+      - order
+    volumes:
+      - order-db:/data/postgres
+
+  order:
+    build: ./order
+    container_name: order
+    environment:
+      POSTGRES_HOST: order-db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: order
+    networks:
+      - ecommerce
+      - order
+    depends_on:
+      order-db:
+        condition: service_healthy
+
   api-gateway:
     build: ./api-gateway
     ports:
@@ -73,17 +100,21 @@ services:
     environment:
       AUTH_URL: http://auth:5001
       PRODUCT_URL: http://product:5002
+      ORDER_URL: http://order:5003
     networks:
       - ecommerce
     depends_on:
       - auth
       - product
+      - order
 
 volumes:
   auth-db:
   product-db:
+  order-db:
 
 networks:
   auth:
   product:
+  order:
   ecommerce:

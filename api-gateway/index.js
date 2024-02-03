@@ -28,6 +28,12 @@ app.use("/product", authMiddleware, roleMiddleware("seller"), (req, res) => {
   proxy.web(req, res, { target: config.productUrl });
 });
 
+// Route requests to the order service
+// Allow only buyer to order
+app.use("/order", authMiddleware, roleMiddleware("buyer"), (req, res) => {
+  proxy.web(req, res, { target: config.orderUrl });
+});
+
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`API Gateway listening on port ${port}`);
