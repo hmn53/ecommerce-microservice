@@ -4,11 +4,24 @@ An ecommerce api with microservice architecture.
 
 ## Architecture
 
-- The application uses an API gateway to bind all services along a single front, acting as a proxy for the domains in which the `auth`, `order` and `product` microservices are deployed on
-- Each microservice, the API gateway, databases and rabbitMQ are deployed as Docker images
-- Interactions between `product` service and `order` service uses both synchronous communication using REST and asynchronous AMQP protcol, using RabbitMQ which consists of two queues - orders and products
-- `order` service calls `product` service to get product details and created an o order with pending status. It then publishes to product queue to update product stock
-- `product` service consumes the product queue, updates the product stock and publishes to order queue to update order status
+The application is designed with a microservices architecture, utilizing an API gateway to consolidate services under a single entry point. The following microservices are deployed:
+
+- **Authentication Service**: Responsible for user authentication.
+- **Product Service**: Manages product information.
+- **Order Service**: Handles order processing.
+
+Each microservice, along with the API gateway, databases, and RabbitMQ, are containerized using Docker images.
+
+Interactions between the product service and order service employ both synchronous communication via REST and asynchronous communication using the AMQP protocol with RabbitMQ. Two queues are utilized:
+
+- **Orders Queue**: For communicating order updates.
+- **Products Queue**: For updating product stock.
+
+The workflow is as follows:
+
+1. The order service calls the product service to retrieve product details and create an order with a pending status.
+2. The order service publishes to the product queue to update product stock.
+3. The product service consumes the product queue, updates the product stock, and publishes to the order queue to update the order status.
 
 ## Prerequisites
 
