@@ -4,24 +4,43 @@ An ecommerce api with microservice architecture.
 
 ## Architecture
 
-The application is designed with a microservices architecture, utilizing an API gateway to consolidate services under a single entry point. The following microservices are deployed:
+This project implements a microservices-based e-commerce application, encompassing user authentication, product management, and order processing. It emphasizes concurrency control, clustering for high availability, and database integration.
 
-- **Authentication Service**: Responsible for user authentication.
-- **Product Service**: Manages product information.
-- **Order Service**: Handles order processing.
+- Services:
 
-Each microservice, along with the API gateway, databases, and RabbitMQ, are containerized using Docker images.
+  - Authentication Service: Manages user registration, login, and access control.
+  - Product Service: Handles product creation, retrieval, updates, and deletion.
+  - Order Service: Processes order placement, validation, and status updates.
+  - API Gateway: Acts as a single entry point for all API requests, routing them to relevant services.
 
-Interactions between the product service and order service employ both synchronous communication via REST and asynchronous communication using the AMQP protocol with RabbitMQ. Two queues are utilized:
+- Technology Stack:
 
-- **Orders Queue**: For communicating order updates.
-- **Products Queue**: For updating product stock.
+  - Node with Express for microservices.
+  - Docker for containerization and deployment.
+  - Docker Compose for orchestration.
+  - PostgreSQL databases for data storage.
+  - RabbitMQ for asynchronous communication.
+  - RESTful APIs for communication between services and clients.
 
-The workflow is as follows:
+### Concurrency Control
 
-1. The order service calls the product service to retrieve product details and create an order with a pending status.
-2. The order service publishes to the product queue to update product stock.
-3. The product service consumes the product queue, updates the product stock, and publishes to the order queue to update the order status.
+- Pessimistic Locking: Implemented pessimistic locking to maintain data integrity when multiple users try to order or update a product.
+
+### Database Integration
+
+- Databases: Three PostgreSQL databases (auth, product, order) for service-specific data.
+- Schema Design: Normalized schema for each database ensures data integrity and efficient querying.
+
+### APIs and Communication
+
+- RESTful APIs: Each service exposes well-defined RESTful APIs (e.g., GET, POST, PUT, DELETE) for CRUD operations.
+- Authentication: JWT-based authentication for secure access to protected endpoints.
+- Authorization: Role-based access control (RBAC) restricts users to their relevant data.
+- Communication:
+  - Synchronous REST calls for immediate responses.
+  - Asynchronous AMQP protocol using RabbitMQ for decoupled interactions.
+  - Order service calls product service for details, creates order with pending status, and publishes to product queue for stock update.
+  - Product service consumes the product queue, updates stock, and publishes to order queue for status update.
 
 ## Prerequisites
 
