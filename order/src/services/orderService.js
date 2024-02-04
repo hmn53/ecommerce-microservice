@@ -1,6 +1,7 @@
 const axios = require('axios');
 const OrderRepository = require("../repositories/orderRepository");
 const config = require('../config');
+const messageBroker = require('../utils/messageBroker');
 
 class OrderService {
   constructor() {
@@ -32,6 +33,8 @@ class OrderService {
 
     const dbOrder = await this.orderRepository.createOrder(order);
 
+    messageBroker.publishMessage(config.messageBrokerProductQueue, dbOrder);
+
     return { success: true, dbProduct: dbOrder };
   }
 
@@ -42,13 +45,6 @@ class OrderService {
     });
 
     return response.data.product;
-  }
-
-
-  async updateOrder(id, status) {
-    const dbOrder = await this.orderRepository.updateOrderStatus(id, status);
-
-    return { success: true, dbProduct: dbOrder };
   }
 }
 

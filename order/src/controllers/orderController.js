@@ -36,7 +36,6 @@ class OrderController {
     try {
       const productId = req.params.productId;
       const product = await this.orderService.getProduct(productId);
-      console.log(product, req.body.quantity)
       if (product.stock < req.body.quantity) {
         return res.status(400).json({ message: "Out of stock" });
       }

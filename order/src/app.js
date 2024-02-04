@@ -4,10 +4,12 @@ const validateMiddleware = require("./middlewares/validateMiddleware");
 const getUserMiddleware = require("./middlewares/getUserMiddleware");
 const OrderController = require("./controllers/orderController");
 const { orderSchema } = require("./validators/orderValidator");
+const messageBroker = require("./utils/messageBroker");
 
 class App {
     constructor() {
         this.app = express();
+        this.setupMessageBroker();
         this.setMiddlewares();
         this.orderController = new OrderController();
         this.setRoutes();
@@ -15,6 +17,10 @@ class App {
 
     start() {
         this.server = this.app.listen(config.port, () => console.log(`Order server listening on port ${config.port}`));
+    }
+
+    setupMessageBroker() {
+        messageBroker.connect();
     }
 
     setMiddlewares() {

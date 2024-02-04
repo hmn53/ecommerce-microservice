@@ -7,6 +7,7 @@ class ProductRepository {
 
     async getById(id) {
         return await Product.query()
+            .forUpdate()
             .findById(id);
     }
 

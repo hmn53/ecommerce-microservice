@@ -6,5 +6,8 @@ module.exports = {
     pgPassword: process.env.POSTGRES_PASSWORD,
     pgDatabase: process.env.POSTGRES_DB,
     productUrl: process.env.PRODUCT_URL,
+    messageBrokerUrl: process.env.RABBITMQ_URL,
+    messageBrokerProductQueue: process.env.RABBITMQ_PRODUCT_QUEUE,
+    messageBrokerOrderQueue: process.env.RABBITMQ_ORDER_QUEUE,
     port: process.env.PORT || 5003
 };
